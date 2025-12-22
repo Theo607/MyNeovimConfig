@@ -108,10 +108,3 @@ A modern Neovim configuration focused on productivity, LSP, Git, debugging, and 
 - `<leader>fb` → Buffers  
 - `<leader>fh` → Help tags  
 
----
-
-## Installation
-
-```bash
-bash install.sh
-
