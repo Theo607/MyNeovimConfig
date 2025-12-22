@@ -34,6 +34,9 @@ local plugins = {
     require("plugins.lastplace"),
     require("plugins.twilight"),
     require("plugins.oil"),
+    require("plugins.noice"),
+    require("plugins.fidget"),
+    require("plugins.illuminate"),
 }
 
 -- plugins

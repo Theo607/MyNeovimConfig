@@ -119,66 +119,71 @@ local sections = {
         { "p",         "Paste copied file/folder" },
         { "q",         "Close Oil buffer" },
     },
+    Noice_UI = {
+        { "<leader>nm", "Dismiss messages" },
+        { "<leader>nh", "Show message history" },
+    },
+    Fidget = {
+        { "fidget.nvim", "Shows LSP progress automatically" },
+        { "]i",          "Jump to next occurrence (vim-illuminate)" },
+        { "[i",          "Jump to previous occurrence (vim-illuminate)" },
+    }
+
 }
 
--- Helper: wipe buffer if it exists
-local function wipe_buf()
-    if M.buf and vim.api.nvim_buf_is_valid(M.buf) then
-        vim.api.nvim_buf_delete(M.buf, { force = true })
-        M.buf = nil
-    end
-end
-
 local function close_buf()
-    if M.buf and vim.api.nvim_buf_is_valid(M.buf) then
-        -- Close the window showing this buffer first
-        for _, win in ipairs(vim.api.nvim_list_wins()) do
-            if vim.api.nvim_win_get_buf(win) == M.buf then
-                vim.api.nvim_win_close(win, true) -- true = force close
-            end
-        end
-        M.buf = nil
+    if M.current_buf and vim.api.nvim_buf_is_valid(M.current_buf) then
+        vim.api.nvim_buf_delete(M.current_buf, { force = true })
+        M.current_buf = nil
     end
 end
 
--- Show section in the cheatsheet buffer
 local function show_section(name)
-    wipe_buf() -- wipe previous buffer to avoid leftovers
-    vim.cmd("vnew")
-    M.buf = vim.api.nvim_get_current_buf()
-    vim.bo[M.buf].buftype = "nofile"
-    vim.bo[M.buf].bufhidden = "wipe"
-    vim.bo[M.buf].swapfile = false
-    vim.cmd("vertical resize 55")
-    vim.cmd("setlocal nowrap")
-    vim.bo[M.buf].modifiable = true
+    close_buf()
 
+    -- Create buffer
+    local buf = vim.api.nvim_create_buf(false, true) -- [listed=false, scratch=true]
+    M.current_buf = buf
+
+    -- Build lines
     local lines = { "=== " .. name .. " ===", "" }
     for _, km in ipairs(sections[name]) do
-        table.insert(lines, string.format("%-20s → %s", km[1], km[2]))
+        table.insert(lines, string.format("%-15s → %s", km[1], km[2]))
     end
     table.insert(lines, "")
     table.insert(lines, "<Esc> to go back / q to close")
 
-    vim.api.nvim_buf_set_lines(M.buf, 0, -1, false, lines)
-    vim.bo[M.buf].modifiable = false
-    vim.api.nvim_set_current_buf(M.buf)
+    vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
 
-    -- Close section and go back to main menu
+    -- Get screen size for floating window
+    local width = math.floor(vim.o.columns * 0.5)
+    local height = math.floor(vim.o.lines * 0.5)
+    local row = math.floor((vim.o.lines - height) / 2 - 1)
+    local col = math.floor((vim.o.columns - width) / 2)
+
+    -- Open floating window
+    vim.api.nvim_open_win(buf, true, {
+        relative = "editor",
+        width = width,
+        height = height,
+        row = row,
+        col = col,
+        style = "minimal",
+        border = "rounded",
+    })
+
+    vim.api.nvim_buf_set_option(buf, "modifiable", false)
+
+    -- Keymaps to close / go back
     vim.keymap.set("n", "<Esc>", function()
         close_buf()
-        show_main_menu()
-    end, { buffer = M.buf, silent = true })
-
-    -- Close buffer entirely
-    vim.keymap.set("n", "q", function()
-        close_buf()
-    end, { buffer = M.buf, silent = true })
+        M.show()
+    end, { buffer = buf, silent = true })
+    vim.keymap.set("n", "q", close_buf, { buffer = buf, silent = true })
 end
 
--- Show main menu
-function show_main_menu()
-    wipe_buf() -- ensure old buffer is closed
+function M.show()
+    -- Main menu using vim.ui.select
     local choices = {}
     for sec, _ in pairs(sections) do table.insert(choices, sec) end
     table.sort(choices)
@@ -190,9 +195,6 @@ function show_main_menu()
     end)
 end
 
-M.show = show_main_menu
-
--- Keymap to open cheatsheet
 vim.keymap.set("n", "<leader>?", M.show, { desc = "Show keymap cheatsheet" })
 
 return M
