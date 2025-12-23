@@ -4,13 +4,13 @@ return {
   opts = {
     chunk = {
       enable = true,
-      use_treesitter = true,
+      use_treesitter = false,
     },
     indent = {
       enable = true,
     },
     line_num = {
-      enable = false,
+      enable = true,     -- turn on line numbers for indent levels
     },
     blank = {
       enable = false,

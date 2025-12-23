@@ -32,7 +32,7 @@ local plugins = {
     require("plugins.impatient"),
     require("plugins.dressing"),
     require("plugins.lastplace"),
-    require("plugins.twilight"),
+    require("plugins.limelight"),
     require("plugins.oil"),
     require("plugins.noice"),
     require("plugins.fidget"),
