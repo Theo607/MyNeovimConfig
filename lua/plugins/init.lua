@@ -38,6 +38,7 @@ local plugins = {
     require("plugins.fidget"),
     require("plugins.illuminate"),
     require("plugins.smear"),
+    require("plugins.chunk"),
 }
 
 -- plugins
