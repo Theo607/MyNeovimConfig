@@ -65,3 +65,7 @@ vim.keymap.set("n", "<leader>z", function()
     require("twilight").toggle()
 end, { desc = "Toggle Twilight (focus mode)" })
 
+vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, {
+  desc = "Show diagnostics under cursor",
+})
+
