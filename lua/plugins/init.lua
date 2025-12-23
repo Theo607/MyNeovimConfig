@@ -37,6 +37,7 @@ local plugins = {
     require("plugins.noice"),
     require("plugins.fidget"),
     require("plugins.illuminate"),
+    require("plugins.smear"),
 }
 
 -- plugins
