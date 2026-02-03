@@ -78,4 +78,4 @@ vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, {
     desc = "Show diagnostics under cursor",
 })
 
-vim.keymap.set("n", "<leader>ts", ":Themery<CR>")
+vim.keymap.set("n", "<leader>th", ":Themery<CR>")

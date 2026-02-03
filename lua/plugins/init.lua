@@ -40,6 +40,7 @@ local plugins = {
     require("plugins.chunk"),
     require("plugins.markview"),
     require("plugins.themery"),
+    require("plugins.scratch"),
 }
 
 -- plugins
