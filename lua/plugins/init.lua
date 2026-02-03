@@ -41,6 +41,7 @@ local plugins = {
     require("plugins.markview"),
     require("plugins.themery"),
     require("plugins.scratch"),
+    require("plugins.zen"),
 }
 
 -- plugins
