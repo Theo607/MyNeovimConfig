@@ -1,9 +1,9 @@
-return -- Lua
-{
+return {
   "folke/zen-mode.nvim",
-  opts = {
-    -- your configuration comes here
-    -- or leave it empty to use the default settings
-    -- refer to the configuration section below
-  }
+  opts = {},
+
+  config = function()
+    vim.keymap.set("n", "<leader>cz", ":Zen<CR>", { desc = "Toggle Zen Mode" })
+  end,
 }
+

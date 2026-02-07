@@ -42,7 +42,8 @@ local plugins = {
     require("plugins.themery"),
     require("plugins.scratch"),
     require("plugins.zen"),
-    require("plugins.markdown_preview"),
+    require("plugins.transparent"),
+    -- require("plugins.markdown_preview"),
 }
 
 -- plugins
